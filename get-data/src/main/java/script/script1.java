@@ -15,9 +15,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class script1 {
-    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException {
         long start = System.currentTimeMillis();
-        LocalDateTime present = LocalDateTime.now();
 
 //        Access control database to get data config
         ConnectionMySql controlDatabase = new ConnectionMySql(StringConstant.CONTROL_DATABASE, "root", "12345678");
