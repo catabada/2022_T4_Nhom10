@@ -2,8 +2,7 @@ package dao;
 
 import constant.QUERY;
 import constant.StatusFileLog;
-import entity.FileConfig;
-import entity.FileLog;
+import entity.control.FileLog;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -96,5 +95,28 @@ public class FileLogDAO implements BaseDAO<FileLog> {
     @Override
     public void delete(int id) {
 
+    }
+
+    public List<FileLog> findAllByStatus(StatusFileLog status) {
+        List<FileLog> list = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(QUERY.FILE_LOG.FIND_ALL_BY_FILE_STATUS);
+            statement.setString(1, status.toString());
+            ResultSet rs = statement.executeQuery();
+            if (!rs.isBeforeFirst() && rs.getRow() == 0) return list;
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                int fileConfigId = rs.getInt("file_config_id");
+                String fileName = rs.getString("file_name");
+                String fileDate = rs.getString("file_date");
+                String time = rs.getString("time");
+                String author = rs.getString("author");
+                list.add(new FileLog(id, fileConfigId, fileName, fileDate, time, status, author));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return list;
+        }
+        return list;
     }
 }

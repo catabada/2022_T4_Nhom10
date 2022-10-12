@@ -3,7 +3,7 @@ package constant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LocalTimeCustom {
+public class CustomFunction {
 
     public static String[] createTimer() {
         LocalDateTime localDateTime = LocalDateTime.now();

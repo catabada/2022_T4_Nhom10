@@ -12,5 +12,6 @@ public class QUERY {
         public static String SAVE = "insert into file_log(file_config_id, file_name, file_date, time, author) values (?, ?, ?, ?, ?)";
         public static String DELETE = "delete from file_log where id = ?";
         public static final String UPDATE = "update file_log set `file_config_id` = ?, `file_name` = ?, `file_date` = ?, `time` = ?, `author` = ?, `status` = ? where (`id` = ?)";
+        public static String FIND_ALL_BY_FILE_STATUS = "select * from file_log where status = ?";
     }
 }

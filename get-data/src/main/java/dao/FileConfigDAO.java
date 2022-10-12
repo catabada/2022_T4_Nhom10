@@ -1,7 +1,7 @@
 package dao;
 
 import constant.QUERY;
-import entity.FileConfig;
+import entity.control.FileConfig;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
