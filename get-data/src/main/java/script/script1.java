@@ -4,32 +4,31 @@ import connection.ConnectionMySql;
 import constant.CustomFunction;
 import constant.StatusFileLog;
 import constant.StringConstant;
-import dao.FileConfigDAO;
-import dao.FileLogDAO;
+import repository.FileConfigRepository;
+import repository.FileLogRepository;
 import entity.control.FileConfig;
 import entity.control.FileLog;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 
 public class script1 {
     public static void main(String[] args) throws SQLException {
         long start = System.currentTimeMillis();
 
 //      Access control database to get data config
-        ConnectionMySql controlDatabase = new ConnectionMySql(StringConstant.CONTROL_DATABASE, "root", "12345678");
+        ConnectionMySql controlDatabase = new ConnectionMySql(StringConstant.CONTROL_DATABASE);
         Connection connection = controlDatabase.getConnection();
 
-//      Initialization DAO
-        FileConfigDAO fileConfigDAO = new FileConfigDAO(connection);
-        FileLogDAO fileLogDAO = new FileLogDAO(connection);
+//      Initialization Repository
+        FileConfigRepository fileConfigRepository = new FileConfigRepository(connection);
+        FileLogRepository fileLogRepository = new FileLogRepository(connection);
 
 //      Check condition
-        if (fileLogDAO.findAllByStatus(StatusFileLog.ES).isEmpty()) {
+        if (fileLogRepository.findAllByStatus(StatusFileLog.ES).isEmpty()) {
 //          Get record from control database
-            FileConfig fileConfig = fileConfigDAO.findById(1);
+            FileConfig fileConfig = fileConfigRepository.findById(1);
 
 //          Create Timer
             String[] split = CustomFunction.createTimer();
@@ -38,7 +37,7 @@ public class script1 {
 
 //          Create File Log
             FileLog fileLog = new FileLog(fileConfig.getId(), date, time, StringConstant.AUTHOR);
-            fileLogDAO.save(fileLog);
+            fileLogRepository.save(fileLog);
 
             System.out.printf("Starting crawl data from %s ..... \n", fileConfig.getSrcLoad());
             try {
@@ -47,15 +46,24 @@ public class script1 {
                 fileLog.setFileName(fileName);
                 fileLog.setStatus(StatusFileLog.ER);
                 System.out.println("Crawl data successful");
+
+//              Access ftp server
+//                System.out.println("Connect ftp server .....");
+//                ConnectFTPServer connectFTPServer = new ConnectFTPServer(fileConfig.getIp(), fileConfig.getPort(), fileConfig.getUsername(), fileConfig.getPassword());
+//                connectFTPServer.connect();
+//                connectFTPServer.sendFileToFtpServer(fileLog.getFileName());
             } catch (IOException e) {
 //              Crawl data failed
+                System.err.println("Crawl data failed: " + e.getMessage());
                 fileLog.setStatus(StatusFileLog.ERR);
-                System.out.println("Craw data failed");
+                throw new RuntimeException(e);
             }
+
 //          Update file log
-            fileLogDAO.save(fileLog);
+            fileLogRepository.save(fileLog);
         }
 
+        connection.close();
 
         long end = System.currentTimeMillis();
         System.out.println("Done: " + (end - start) + "ms");

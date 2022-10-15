@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import constant.QUERY;
 import constant.StatusFileLog;
@@ -8,10 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileLogDAO implements BaseDAO<FileLog> {
+public class FileLogRepository implements BaseRepository<FileLog> {
     private Connection connection;
 
-    public FileLogDAO(Connection connection) {
+    public FileLogRepository(Connection connection) {
         this.connection = connection;
     }
 
@@ -119,4 +119,29 @@ public class FileLogDAO implements BaseDAO<FileLog> {
         }
         return list;
     }
+
+    public List<FileLog> findAllByDateAndStatus(String date, StatusFileLog status) {
+        List<FileLog> list = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(QUERY.FILE_LOG.FIND_ALL_BY_DATE_AND_STATUS);
+            statement.setString(1, date);
+            statement.setString(2, status.toString());
+            ResultSet rs = statement.executeQuery();
+            if (!rs.isBeforeFirst() && rs.getRow() == 0) return list;
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int fileConfigId = rs.getInt("file_config_id");
+                String fileName = rs.getString("file_name");
+                String fileDate = rs.getString("file_date");
+                String time = rs.getString("time");
+                String author = rs.getString("author");
+                list.add(new FileLog(id, fileConfigId, fileName, fileDate, time, status, author));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return list;
+        }
+        return list;
+    }
+
 }

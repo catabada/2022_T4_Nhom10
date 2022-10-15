@@ -1,4 +1,4 @@
-package dao;
+package repository;
 
 import constant.QUERY;
 import entity.control.FileConfig;
@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileConfigDAO implements BaseDAO<FileConfig> {
+public class FileConfigRepository implements BaseRepository<FileConfig> {
     private Connection connection;
 
-    public FileConfigDAO(Connection connection) {
+    public FileConfigRepository(Connection connection) {
         this.connection = connection;
     }
 
