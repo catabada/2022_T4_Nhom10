@@ -63,7 +63,6 @@ public class script1 {
             fileLogRepository.save(fileLog);
         }
 
-        connection.close();
 
         long end = System.currentTimeMillis();
         System.out.println("Done: " + (end - start) + "ms");

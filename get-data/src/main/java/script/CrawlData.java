@@ -10,11 +10,6 @@ import org.jsoup.select.Elements;
 import java.io.*;
 
 public class CrawlData {
-    public static void main(String[] args) throws FileNotFoundException {
-        PrintWriter pw = new PrintWriter("E:/test.txt");
-        pw.println("natural_key,date,time,province,temp,cloud_description,min_temp,max_temp,humidity,vision,wind_spd,uv_index,atmosphere_quality");
-        pw.close();
-    }
     public static String run(String url) throws IOException {
         Document doc = Jsoup.connect(url).timeout(3000).get();
         String timerPresent = doc.select("#timer").text();
@@ -30,49 +25,53 @@ public class CrawlData {
         System.out.println("Creating file name: " + fileName + "......");
         File csvFile = new File(StringConstant.FOLDER_PATH_LOCAL + "/" + fileName);
         PrintWriter pw = new PrintWriter(csvFile);
-        pw.append("natural_key,date,time,province,temp,cloud_description,min_temp,max_temp,humidity,vision,wind_spd,uv_index,atmosphere_quality");
+//        pw.append("natural_key,date,time,province,temp,cloud_description,min_temp,max_temp,humidity,vision,wind_spd,uv_index,atmosphere_quality");
 
         Elements linkProvinces = doc.select(".mega-submenu li a[href]");
         for (Element e : linkProvinces) {
             String link = url + e.attr("href");
             Document documentProvince = Jsoup.connect(link).get();
-            String province = documentProvince.select(".breadcrumb-item.active").text().replace("Thời tiết ", "");
+            String province = documentProvince.select(".breadcrumb-item.active").text().replace("Thời tiết ", "").replaceAll("- ","");
             String naturalKeyPresent = createNaturalKey(province, datePresent, timePresent);
-            String temperaturePresent = documentProvince.select(".current-temperature").text().replaceAll("°", "");
+            int temperaturePresent = Integer.parseInt(documentProvince.select(".current-temperature").text().replaceAll("°", ""));
             String cloudDescriptionPresent = documentProvince.select(".overview-caption p").text();
             Element weatherDetailPresent = documentProvince.select(".weather-detail").get(0);
             Elements attrs = weatherDetailPresent.select("span.text-white.op-8.fw-bold");
 
             String maxMinTempPresent = attrs.get(0).select("span.text-white").text();
-            String minTempPresent = maxMinTempPresent.split("/")[0].trim().replaceAll("°", "");
-            String maxTempPresent = maxMinTempPresent.split("/")[1].trim().replaceAll("°", "");
-            String humidityPresent = Double.parseDouble(attrs.get(1).select("span.text-white").text().replaceAll("%", "")) / 100 + "";
-            String visionPresent = attrs.get(2).select("span.text-white").text().replaceAll("km", "").trim();
-            String windPresent = attrs.get(3).select("span.text-white").text().replace("km/giờ", "").replaceAll("km", "").trim();
-            String UVIndex = attrs.get(5).select("span.text-white").text();
+            int minTempPresent = Integer.parseInt(maxMinTempPresent.split("/")[0].trim().replaceAll("°", ""));
+            int maxTempPresent = Integer.parseInt(maxMinTempPresent.split("/")[1].trim().replaceAll("°", ""));
+            double humidityPresent = Double.parseDouble(Double.parseDouble(attrs.get(1).select("span.text-white").text().replaceAll("%", "")) / 100 + "");
+            double visionPresent = Double.parseDouble(attrs.get(2).select("span.text-white").text().replaceAll("km", "").trim());
+            double windPresent = Double.parseDouble(attrs.get(3).select("span.text-white").text().replace("km/giờ", "").replaceAll("km", "").trim());
+            double UVIndex = Double.parseDouble(attrs.get(5).select("span.text-white").text());
 
             String qualityAtmospherePresent = documentProvince.select(".air-active").text();
             pw.println(naturalKeyPresent + "," + datePresent + "," + timePresent + "," + province + "," + temperaturePresent + "," + cloudDescriptionPresent + "," + minTempPresent + "," + maxTempPresent + "," + humidityPresent + "," + visionPresent + "," + windPresent + "," + UVIndex + "," + qualityAtmospherePresent);
             System.out.println(naturalKeyPresent + "," + datePresent + "," + timePresent + "," + province + "," + temperaturePresent + "," + cloudDescriptionPresent + "," + minTempPresent + "," + maxTempPresent + "," + humidityPresent + "," + visionPresent + "," + windPresent + "," + UVIndex + "," + qualityAtmospherePresent);
             Document docToday = Jsoup.connect(link + "/theo-gio").get();
             Elements timesToday = docToday.select("details.weather-day");
-            for (int i = 1; i <= 23 - getHour(timerPresent); i++) {
+            for (int i = 0; i <= timesToday.size(); i++) {
                 String hour = timesToday.get(i).select(".summary-day").text().trim();
-                String naturalKeyByHour = createNaturalKey(province, datePresent, hour).trim();
-                String temperatureByHour = "";
-                String maxMinTempByHour = timesToday.get(i).select(".summary-temperature").text().replaceAll("C", "").trim();
-                String minTempByHour = maxMinTempByHour.split("/")[0].trim().replaceAll("°", "").trim();
-                String maxTempByHour = maxMinTempByHour.split("/")[1].trim().replaceAll("°", "").trim();
-                String cloudDescriptionByHour = timesToday.get(i).select(".summary-description").text();
-                String humidityByHour = Double.parseDouble(timesToday.get(i).select(".summary-humidity").text().replaceAll("%", "")) / 100 + "";
-                String windByHour = timesToday.get(i).select(".summary-speed").text().replaceAll("Wind", "").trim().replace("km/giờ", "").replaceAll("km", "").trim();
-                Elements weatherContentByHour = timesToday.get(i).select(".weather-content-item");
+                if(hour.contains("/")) break;
+                if (getHour(hour) > getHour(timerPresent)) {
+                    String naturalKeyByHour = createNaturalKey(province, datePresent, hour).trim();
+                    int temperatureByHour = -9999;
+                    String maxMinTempByHour = timesToday.get(i).select(".summary-temperature").text().replaceAll("C", "").trim();
+                    int minTempByHour = Integer.parseInt(maxMinTempByHour.split("/")[0].trim().replaceAll("°", "").trim());
+                    int maxTempByHour = Integer.parseInt(maxMinTempByHour.split("/")[1].trim().replaceAll("°", "").trim());
+                    String cloudDescriptionByHour = timesToday.get(i).select(".summary-description").text();
+                    double humidityByHour = Double.parseDouble(Double.parseDouble(timesToday.get(i).select(".summary-humidity").text().replaceAll("%", "")) / 100 + "");
+                    double windByHour = Double.parseDouble(timesToday.get(i).select(".summary-speed").text().replaceAll("Wind", "").trim().replace("km/giờ", "").replaceAll("km", "").trim());
+                    Elements weatherContentByHour = timesToday.get(i).select(".weather-content-item");
 
-                String uVIndexByHour = weatherContentByHour.get(0).select("span.op-8.fw-bold").text();
-                String visionByHour = weatherContentByHour.get(1).select("span.op-8.fw-bold").text().replaceAll("km", "").trim();
+                    String uVIndexByHour = weatherContentByHour.get(0).select("span.op-8.fw-bold").text();
+                    String visionByHour = weatherContentByHour.get(1).select("span.op-8.fw-bold").text().replaceAll("km", "").trim();
 
-                pw.println(naturalKeyByHour + "," + datePresent + "," + hour + "," + province + "," + null + "," + cloudDescriptionByHour + "," + minTempByHour + "," + maxTempByHour + "," + humidityByHour + "," + visionByHour + "," + windByHour + "," + uVIndexByHour + "," + null);
-                System.out.println(naturalKeyByHour + "," + datePresent + "," + hour + "," + province + "," + null + "," + cloudDescriptionByHour + "," + minTempByHour + "," + maxTempByHour + "," + humidityByHour + "," + visionByHour + "," + windByHour + "," + uVIndexByHour);
+                    pw.println(naturalKeyByHour + "," + datePresent + "," + hour + "," + province + "," + temperatureByHour + "," + cloudDescriptionByHour + "," + minTempByHour + "," + maxTempByHour + "," + humidityByHour + "," + visionByHour + "," + windByHour + "," + uVIndexByHour + "," + "Chưa rõ");
+                    System.out.println(naturalKeyByHour + "," + datePresent + "," + hour + "," + province + "," + temperatureByHour + "," + cloudDescriptionByHour + "," + minTempByHour + "," + maxTempByHour + "," + humidityByHour + "," + visionByHour + "," + windByHour + "," + uVIndexByHour + "," + "Chưa rõ");
+                }
+
             }
 
             Document docTomorrow = Jsoup.connect(link + "/ngay-mai").get();
@@ -82,19 +81,19 @@ public class CrawlData {
                 String hourTomorrow = ele.select(".summary-day").text();
                 String naturalKeyByTomorrow = createNaturalKey(province, dateTomorrow, hourTomorrow);
                 String maxMinTempByHourTomorrow = ele.select(".summary-temperature").text();
-                String minTempByHourTomorrow = maxMinTempPresent.split("/")[0].trim().replaceAll("°", "");
-                String maxTempByHourTomorrow = maxMinTempPresent.split("/")[1].trim().replaceAll("°", "");
+                int minTempByHourTomorrow = Integer.parseInt(maxMinTempByHourTomorrow.split("/")[0].trim().replaceAll("°C", ""));
+                int maxTempByHourTomorrow = Integer.parseInt(maxMinTempByHourTomorrow.split("/")[1].trim().replaceAll("°C", ""));
                 String cloudDescriptionByHourTomorrow = ele.select(".summary-description").text();
-                String humidityByHourTomorrow = Double.parseDouble(ele.select(".summary-humidity").text().replaceAll("%", "")) / 100 + "";
-                String windByHourTomorrow = ele.select(".summary-speed").text().replaceAll("Wind", "").trim().replace("km/giờ", "").replaceAll("km", "").trim();
-
+                double humidityByHourTomorrow = Double.parseDouble(Double.parseDouble(ele.select(".summary-humidity").text().replaceAll("%", "")) / 100 + "");
+                double windByHourTomorrow = Double.parseDouble(ele.select(".summary-speed").text().replaceAll("Wind", "").trim().replace("km/giờ", "").replaceAll("km", "").trim());
+                int tempByHourTomorrow = -9999;
                 Elements weatherContentByTomorrow = ele.select(".weather-content-item");
 
-                String uVIndexByTomorrow = null;
-                String visionByTomorrow = weatherContentByTomorrow.get(1).select("span.op-8.fw-bold").text().replaceAll("km", "").trim();
+                double uVIndexByTomorrow = -9999;
+                double visionByTomorrow = Double.parseDouble(weatherContentByTomorrow.get(1).select("span.op-8.fw-bold").text().replaceAll("km", "").trim());
 
-                pw.println(naturalKeyByTomorrow + "," + dateTomorrow + "," + hourTomorrow + "," + province + "," + null + "," + cloudDescriptionByHourTomorrow + "," + minTempByHourTomorrow + "," + maxTempByHourTomorrow + "," + humidityByHourTomorrow + "," + visionByTomorrow + "," + windByHourTomorrow + "," + uVIndexByTomorrow + "," + null);
-                System.out.println(naturalKeyByTomorrow + "," + dateTomorrow + "," + hourTomorrow + "," + province + "," + null + "," + cloudDescriptionByHourTomorrow + "," + minTempByHourTomorrow + "," + maxTempByHourTomorrow + "," + humidityByHourTomorrow + "," + visionByTomorrow + "," + windByHourTomorrow + "," + uVIndexByTomorrow);
+                pw.println(naturalKeyByTomorrow + "," + dateTomorrow + "," + hourTomorrow + "," + province + "," + tempByHourTomorrow + "," + cloudDescriptionByHourTomorrow + "," + minTempByHourTomorrow + "," + maxTempByHourTomorrow + "," + humidityByHourTomorrow + "," + visionByTomorrow + "," + windByHourTomorrow + "," + uVIndexByTomorrow + "," + "Chưa rõ");
+                System.out.println(naturalKeyByTomorrow + "," + dateTomorrow + "," + hourTomorrow + "," + province + "," + tempByHourTomorrow + "," + cloudDescriptionByHourTomorrow + "," + minTempByHourTomorrow + "," + maxTempByHourTomorrow + "," + humidityByHourTomorrow + "," + visionByTomorrow + "," + windByHourTomorrow + "," + uVIndexByTomorrow + "," + "Chưa rõ");
             }
         }
         pw.close();
@@ -107,7 +106,7 @@ public class CrawlData {
 
     public static String createNaturalKey(String province, String date, String time) {
         String dateModify = date.replaceAll("/", "");
-        String provinceModify = VNCharacterUtils.removeAccent(province).toUpperCase().replaceAll(" ", "");
+        String provinceModify = VNCharacterUtils.removeAccent(province).toUpperCase().replaceAll(" ", "").replaceAll("-", "");
         String timeModify = time.replaceAll(":", "");
         return provinceModify + dateModify + timeModify;
     }

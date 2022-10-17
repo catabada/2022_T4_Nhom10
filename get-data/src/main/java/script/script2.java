@@ -10,9 +10,7 @@ import entity.control.FileLog;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class script2 {
     public static void main(String[] args) throws SQLException {
@@ -27,7 +25,6 @@ public class script2 {
         Connection stagingConnection = stagingDatabase.getConnection();
 
 //      Initialization Repository
-        FileConfigRepository fileConfigRepository = new FileConfigRepository(controlConnection);
         FileLogRepository fileLogRepository = new FileLogRepository(controlConnection);
 
 //      Create Timer
@@ -44,10 +41,13 @@ public class script2 {
             }
         }
         if (newFileLog == null) {
-//            Run script 1 again
+//            Run script 1 again or stop
         } else {
 //          Retrieve file from ftp or local
-            CustomFunction.uploadFileToDatabase(stagingConnection, newFileLog.getFileName());
+            CustomFunction.uploadFileToFactTableStagingDatabase(stagingConnection, newFileLog.getFileName());
+            newFileLog.setStatus(StatusFileLog.SU);
+            fileLogRepository.save(newFileLog);
         }
+
     }
 }
