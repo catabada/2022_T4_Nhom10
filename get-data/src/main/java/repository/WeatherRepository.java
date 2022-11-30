@@ -61,7 +61,7 @@ public class WeatherRepository implements BaseRepository<Weather> {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String naturalKey = rs.getString("natural_key");
-                int dateId = rs.getInt("date_id");
+                int dateId = rs.getInt("date_time_id");
                 String time = rs.getString("time");
                 int provinceId = rs.getInt("province_id");
                 int temp = rs.getInt("temp");
@@ -122,7 +122,7 @@ public class WeatherRepository implements BaseRepository<Weather> {
         try {
             PreparedStatement statement = connection.prepareStatement(weather.getId() == 0 ? QUERY.WEATHER.SAVE : QUERY.WEATHER.UPDATE, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, weather.getNaturalKey());
-            statement.setInt(2, weather.getDateId());
+            statement.setInt(2, weather.getDateTimeId());
             statement.setString(3, weather.getTime());
             statement.setInt(4, weather.getProvinceId());
             statement.setInt(5, weather.getTemp());

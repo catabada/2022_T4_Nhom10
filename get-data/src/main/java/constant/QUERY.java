@@ -10,7 +10,7 @@ public class QUERY {
 
     public static final String CREATE_TEMP_TABLE = "CREATE TEMPORARY TABLE `temp` (\n" +
             "  `natural_key` varchar(255) DEFAULT NULL,\n" +
-            "  `date_id` int  DEFAULT 0,\n" +
+            "  `date_time_id` int  DEFAULT 0,\n" +
             "  `time` varchar(255) DEFAULT NULL,\n" +
             "  `province_id` int DEFAULT 0,\n" +
             "  `temp` float DEFAULT NULL,\n" +
@@ -22,7 +22,7 @@ public class QUERY {
             "  `wind_spd` double DEFAULT -9999,\n" +
             "  `uv_index` double DEFAULT -9999,\n" +
             "  `atmosphere_quality` nvarchar(255) DEFAULT 'Chưa rõ'\n" +
-            ") as select natural_key,d.id as date_id,time,p.id as province_id,temp,cloud_description,min_temp,max_temp,humidity,vision,wind_spd,uv_index,atmosphere_quality \n" +
+            ") as select natural_key,d.id as date_time_id,time,p.id as province_id,temp,cloud_description,min_temp,max_temp,humidity,vision,wind_spd,uv_index,atmosphere_quality \n" +
             "from fact f inner join date_dim d\n" +
             "\t\t\ton f.date = d.date\n" +
             "            inner join province_dim p\n" +
@@ -54,7 +54,7 @@ public class QUERY {
         public static final String DELETE = "delete from file_log where id = ?";
         public static final String SAVE = "INSERT INTO `data-warehouse`.fact\n" +
                 "(natural_key,\n" +
-                "date_id,\n" +
+                "date_time_id,\n" +
                 "time,\n" +
                 "province_id,\n" +
                 "temp,\n" +
@@ -72,7 +72,7 @@ public class QUERY {
                 "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         public static final String UPDATE = "UPDATE `data-warehouse`.fact\n" +
                 "SET natural_key = ?,\n" +
-                "date_id = ?,\n" +
+                "date_time_id = ?,\n" +
                 "time = ?,\n" +
                 "province_id = ?,\n" +
                 "temp = ?,\n" +

@@ -2,12 +2,13 @@ package entity.weather;
 
 import constant.StatusData;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Weather {
+public class Weather implements Serializable {
     private int id;
     private String naturalKey;
-    private int dateId;
+    private int dateTimeId;
     private String time;
     private int provinceId;
     private int temp;
@@ -25,10 +26,10 @@ public class Weather {
     public Weather() {
     }
 
-    public Weather(int id, String naturalKey, int dateId, String time, int provinceId, int temp, String cloudDescription, int minTemp, int maxTemp, double humidity, double vision, double windSpd, double uvIndex, String atmosphereQuality, StatusData status, String expiredDate) {
+    public Weather(int id, String naturalKey, int dateTimeId, String time, int provinceId, int temp, String cloudDescription, int minTemp, int maxTemp, double humidity, double vision, double windSpd, double uvIndex, String atmosphereQuality, StatusData status, String expiredDate) {
         this.id = id;
         this.naturalKey = naturalKey;
-        this.dateId = dateId;
+        this.dateTimeId = dateTimeId;
         this.time = time;
         this.provinceId = provinceId;
         this.temp = temp;
@@ -44,9 +45,9 @@ public class Weather {
         this.expiredDate = expiredDate;
     }
 
-    public Weather(String naturalKey, int dateId, String time, int provinceId, int temp, String cloudDescription, int minTemp, int maxTemp, double humidity, double vision, double windSpd, double uvIndex, String atmosphereQuality) {
+    public Weather(String naturalKey, int dateTimeId, String time, int provinceId, int temp, String cloudDescription, int minTemp, int maxTemp, double humidity, double vision, double windSpd, double uvIndex, String atmosphereQuality) {
         this.naturalKey = naturalKey;
-        this.dateId = dateId;
+        this.dateTimeId = dateTimeId;
         this.time = time;
         this.provinceId = provinceId;
         this.temp = temp;
@@ -60,10 +61,10 @@ public class Weather {
         this.atmosphereQuality = atmosphereQuality;
     }
 
-    public Weather(int id, String naturalKey, int dateId, String time, int provinceId, int temp, String cloudDescription, int minTemp, int maxTemp, double humidity, double vision, double windSpd, double uvIndex, String atmosphereQuality) {
+    public Weather(int id, String naturalKey, int dateTimeId, String time, int provinceId, int temp, String cloudDescription, int minTemp, int maxTemp, double humidity, double vision, double windSpd, double uvIndex, String atmosphereQuality) {
         this.id = id;
         this.naturalKey = naturalKey;
-        this.dateId = dateId;
+        this.dateTimeId = dateTimeId;
         this.time = time;
         this.provinceId = provinceId;
         this.temp = temp;
@@ -93,12 +94,12 @@ public class Weather {
         this.naturalKey = naturalKey;
     }
 
-    public int getDateId() {
-        return dateId;
+    public int getDateTimeId() {
+        return dateTimeId;
     }
 
-    public void setDateId(int dateId) {
-        this.dateId = dateId;
+    public void setDateTimeId(int dateTimeId) {
+        this.dateTimeId = dateTimeId;
     }
 
     public String getTime() {
@@ -209,11 +210,17 @@ public class Weather {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Weather weather)) return false;
-        return id == weather.id && dateId == weather.dateId && provinceId == weather.provinceId && temp == weather.temp && minTemp == weather.minTemp && maxTemp == weather.maxTemp && Double.compare(weather.humidity, humidity) == 0 && Double.compare(weather.vision, vision) == 0 && Double.compare(weather.windSpd, windSpd) == 0 && Double.compare(weather.uvIndex, uvIndex) == 0 && Objects.equals(naturalKey, weather.naturalKey) && Objects.equals(time, weather.time) && Objects.equals(cloudDescription, weather.cloudDescription) && Objects.equals(atmosphereQuality, weather.atmosphereQuality) && status == weather.status && Objects.equals(expiredDate, weather.expiredDate);
+        return provinceId == weather.provinceId
+                && temp == weather.temp
+                && minTemp == weather.minTemp
+                && maxTemp == weather.maxTemp
+                && Double.compare(weather.humidity, humidity) == 0
+                && Double.compare(weather.vision, vision) == 0
+                && Double.compare(weather.windSpd, windSpd) == 0
+                && Double.compare(weather.uvIndex, uvIndex) == 0
+                && Objects.equals(naturalKey, weather.naturalKey)
+                && Objects.equals(cloudDescription, weather.cloudDescription)
+                && Objects.equals(atmosphereQuality, weather.atmosphereQuality);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, naturalKey, dateId, time, provinceId, temp, cloudDescription, minTemp, maxTemp, humidity, vision, windSpd, uvIndex, atmosphereQuality, status, expiredDate);
-    }
 }

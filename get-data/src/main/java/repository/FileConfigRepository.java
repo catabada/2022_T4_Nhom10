@@ -3,10 +3,7 @@ package repository;
 import constant.QUERY;
 import entity.control.FileConfig;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class FileConfigRepository implements BaseRepository<FileConfig> {
         List<FileConfig> list = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(QUERY.FILE_CONFIG.FIND_ALL);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -45,9 +43,9 @@ public class FileConfigRepository implements BaseRepository<FileConfig> {
     @Override
     public FileConfig findById(int id) {
         try {
-            PreparedStatement statement = connection.prepareStatement(QUERY.FILE_CONFIG.FIND_BY_ID);
-            statement.setLong(1, id);
-            ResultSet rs = statement.executeQuery();
+            CallableStatement cs = connection.prepareCall(QUERY.FILE_CONFIG.FIND_BY_ID);
+            cs.setInt(1, id);
+            ResultSet rs = cs.executeQuery();
             if (!rs.isBeforeFirst() && rs.getRow() == 0) return null;
             if (rs.next()) {
                 String srcName = rs.getString("src_name");

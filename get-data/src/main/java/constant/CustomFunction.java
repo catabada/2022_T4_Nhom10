@@ -70,7 +70,7 @@ public class CustomFunction {
             if (!rs.isBeforeFirst() && rs.getRow() == 0) return list;
             while (rs.next()) {
                 String naturalKey = rs.getString("natural_key");
-                int dateId = rs.getInt("date_id");
+                int dateId = rs.getInt("date_time_id");
                 String time = rs.getString("time");
                 int provinceId = rs.getInt("province_id");
                 int temp = rs.getInt("temp");

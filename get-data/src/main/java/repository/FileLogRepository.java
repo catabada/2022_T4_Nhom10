@@ -44,9 +44,10 @@ public class FileLogRepository implements BaseRepository<FileLog> {
     @Override
     public FileLog findById(int id) {
         try {
-            PreparedStatement statement = connection.prepareStatement(QUERY.FILE_LOG.FIND_BY_ID);
-            statement.setLong(1, id);
-            ResultSet rs = statement.executeQuery();
+            CallableStatement cs = connection.prepareCall(QUERY.FILE_LOG.FIND_BY_ID);
+            cs.setInt(1, id);
+
+            ResultSet rs = cs.executeQuery();
             if (!rs.isBeforeFirst() && rs.getRow() == 0) return null;
             if (rs.next()) {
                 int fileConfigId = rs.getInt("file_config_id");

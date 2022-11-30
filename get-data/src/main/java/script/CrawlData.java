@@ -13,7 +13,7 @@ public class CrawlData {
     public static String run(String url) throws IOException {
         Document doc = Jsoup.connect(url).timeout(3000).get();
         String timerPresent = doc.select("#timer").text();
-        String timePresent = timerPresent.substring(0, timerPresent.indexOf("|") - 1).trim();
+        String timePresent = timerPresent.substring(0, timerPresent.indexOf("|") - 1).trim().substring(0,2) + ":00";
         String datePresent = timerPresent.substring(timerPresent.indexOf("|") + 1, timerPresent.length()).trim();
 
         File folder = new File(StringConstant.FOLDER_PATH_LOCAL);

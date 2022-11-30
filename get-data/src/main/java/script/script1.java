@@ -1,5 +1,6 @@
 package script;
 
+import connection.ConnectFTPServer;
 import connection.ConnectionMySql;
 import constant.CustomFunction;
 import constant.StatusFileLog;
@@ -48,10 +49,10 @@ public class script1 {
                 System.out.println("Crawl data successful");
 
 //              Access ftp server
-//                System.out.println("Connect ftp server .....");
-//                ConnectFTPServer connectFTPServer = new ConnectFTPServer(fileConfig.getIp(), fileConfig.getPort(), fileConfig.getUsername(), fileConfig.getPassword());
-//                connectFTPServer.connect();
-//                connectFTPServer.sendFileToFtpServer(fileLog.getFileName());
+                System.out.println("Connect ftp server .....");
+                ConnectFTPServer connectFTPServer =  ConnectFTPServer.getInstance(fileConfig.getIp(), fileConfig.getPort(), fileConfig.getUsername(), fileConfig.getPassword());
+                connectFTPServer.connect();
+                connectFTPServer.sendFileToFtpServer(fileLog.getFileName());
             } catch (IOException e) {
 //              Crawl data failed
                 System.err.println("Crawl data failed: " + e.getMessage());

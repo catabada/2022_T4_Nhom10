@@ -1,9 +1,11 @@
 package script;
 
+import connection.ConnectFTPServer;
 import connection.ConnectionMySql;
 import constant.CustomFunction;
 import constant.StatusFileLog;
 import constant.StringConstant;
+import entity.control.FileConfig;
 import repository.FileConfigRepository;
 import repository.FileLogRepository;
 import entity.control.FileLog;
@@ -26,6 +28,7 @@ public class script2 {
 
 //      Initialization Repository
         FileLogRepository fileLogRepository = new FileLogRepository(controlConnection);
+        FileConfigRepository fileConfigRepository = new FileConfigRepository(controlConnection);
 
 //      Create Timer
         String[] split = CustomFunction.createTimer();
@@ -44,6 +47,12 @@ public class script2 {
 //            Run script 1 again or stop
         } else {
 //          Retrieve file from ftp or local
+            // Get record from control database
+            FileConfig fileConfig = fileConfigRepository.findById(1);
+            // Download file from ftp server to local
+            ConnectFTPServer connectFTPServer = ConnectFTPServer.getInstance(fileConfig.getIp(), fileConfig.getPort(), fileConfig.getUsername(), fileConfig.getPassword());
+            connectFTPServer.connect();
+            connectFTPServer.downloadFileFromFtpServer(newFileLog.getFileName());
             CustomFunction.uploadFileToFactTableStagingDatabase(stagingConnection, newFileLog.getFileName());
             newFileLog.setStatus(StatusFileLog.SU);
             fileLogRepository.save(newFileLog);
