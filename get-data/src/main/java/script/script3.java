@@ -80,8 +80,8 @@ public class script3 {
             }
 
         }
-        CustomFunction.truncateDataInFactTableStagingDatabase(stagingConnection);
-        CustomFunction.dropTempTable(stagingConnection);
+//        CustomFunction.truncateDataInFactTableStagingDatabase(stagingConnection);
+//        CustomFunction.dropTempTable(stagingConnection);
 
 
     }

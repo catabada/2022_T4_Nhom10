@@ -15,6 +15,9 @@ public class CrawlData {
         String timerPresent = doc.select("#timer").text();
         String timePresent = timerPresent.substring(0, timerPresent.indexOf("|") - 1).trim().substring(0,2) + ":00";
         String datePresent = timerPresent.substring(timerPresent.indexOf("|") + 1, timerPresent.length()).trim();
+        if(datePresent.substring(0,1).equals("0")) {
+            datePresent = datePresent.substring(1, datePresent.length());
+        }
 
         File folder = new File(StringConstant.FOLDER_PATH_LOCAL);
         if (!folder.exists()) {
@@ -77,6 +80,9 @@ public class CrawlData {
             Document docTomorrow = Jsoup.connect(link + "/ngay-mai").get();
             Elements timesTomorrow = docTomorrow.select("details.weather-day");
             String dateTomorrow = docTomorrow.select(".header-thoi-tiet-ngay span.d-block.text-right").text();
+            if(dateTomorrow.substring(0,1).equals("0")) {
+                dateTomorrow = dateTomorrow.substring(1, dateTomorrow.length());
+            }
             for (Element ele : timesTomorrow) {
                 String hourTomorrow = ele.select(".summary-day").text();
                 String naturalKeyByTomorrow = createNaturalKey(province, dateTomorrow, hourTomorrow);
