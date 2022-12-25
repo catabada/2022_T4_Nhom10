@@ -1,0 +1,4 @@
+@baseUrl = http://localhost:8081/api/v1
+
+# @name getWeather
+GET {{baseUrl}}/weather/get/1

@@ -1,0 +1,1 @@
+export const GET_WEATHER_DETAIL: string = 'GET_WEATHER_BY_ID';

@@ -1,0 +1,1 @@
+export const GET_WEATHERS_FUTURE: string = 'GET_WEATHERS_FUTURE';

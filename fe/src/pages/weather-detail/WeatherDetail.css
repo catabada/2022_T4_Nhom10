@@ -1,0 +1,218 @@
+.weather-detail {
+    background-color: #275eaf;
+    color:#fff;
+    padding: 30px 20px;
+}
+.detail {
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.detail .title{
+    font-size: 18px;
+    line-height: 32px;
+    font-weight: bold;
+}
+.detail .title i {
+    margin-right : 10px;
+}
+.detail .location-auto-refresh{
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 18px;
+    height: 18px;
+    display: inline-block;
+}
+.description  {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px 0;
+}
+.description-img img{
+    width: 106px;
+    height: 106px;
+    margin: 0 10px;
+}
+
+.description .temperature {
+    line-height: 100px;
+    display: inline-flex;
+    font-size: 100px;
+    font-weight: 500;
+    margin: 0 10px;
+}
+.unit-group {
+    font-size: 40px;
+    line-height: 40px;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+    display: inline-flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.description .cloud{
+    margin: 0 20px;
+}
+.description .cloud h5{
+    font-size: 36px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+.description .cloud p{
+    font-size: 18px;
+    font-weight: normal;
+    opacity: 0.8;
+}
+
+
+
+.parameter-item {
+    display: flex;
+    text-align: left;
+}
+.parameter-item .parameter-icon {
+    font-size:22px;
+    margin-right:20px;
+}
+.parameter-title {
+    font-weight: 500;
+
+}
+.parameter p {
+    font-weight: normal;
+    opacity: 0.8;
+}
+
+.quality {
+    padding: 10px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin: 20px 0;
+}
+.quality .air-title{
+    font-size: 18px;
+    line-height: 32px;
+}
+.quality .air-title span {
+    font-size: 20px;
+    font-weight: 500;
+}
+.span-1 {
+    color: #009966;
+}
+.span-2 {
+    color: #ffde33;
+}
+.span-3 {
+    color: #ff9933;
+}
+.span-4 {
+    color: #cc0033;
+}
+.span-5 {
+    color: #660099;
+}
+
+.air-rules {
+    display: flex;
+    justify-content: center;
+}
+.air-api {
+    text-align: center;
+    align-self: center;
+    line-height: 25px;
+    padding: 10px;
+    display: block;
+    width: 150px;
+    font-weight: 500;
+    cursor: context-menu;
+    font-size: 16px;
+}
+.air-api-1 {
+    background-color: #009966;
+}
+.air-api-2 {
+    background-color: #ffde33;
+}
+.air-active {
+    padding : 15px 10px;
+}
+.air-api-3 {
+    background-color: #ff9933;
+}
+.air-api-4 {
+    background-color: #cc0033;
+}
+.air-api-5 {
+    background-color: #660099;
+}
+
+
+
+
+.current-location {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.02);
+    transition: transform 0.8s ease 0s;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 30px;
+    overflow-y: scroll;
+    height: 560px;
+}
+::-webkit-scrollbar {
+    display: none;
+}
+
+.location-name {
+    font-size: 18px;
+    line-height: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    width: 100%;
+}
+.location-name span {
+    font-size: 18px;
+    line-height: 32px;
+    font-weight: bold;
+
+}
+.location-name-icon {
+    margin-right: 10px;
+}
+
+.time-list {
+    display: flex;
+    flex-direction: column;
+}
+.time-item {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.time-item .title {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-right: 10px;
+}
+
+.detail-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.detail-item {
+    font-size: 16px;
+}
+.detail-item i{
+    font-size: 20px;
+    margin:0 10px;
+}
+.current-location .separator-dashed {
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    margin: 5px 0;
+}

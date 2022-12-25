@@ -1,0 +1,78 @@
+.navigation {
+    padding: 20px 10px;
+    border: 1px solid #ccc;
+}
+
+.navigation img {
+    height: 55px;
+}
+.navigation .row {
+    align-items: center;
+}
+
+.navigation .search {
+
+}
+
+.search {
+    position: relative;
+}
+.search--wrapper {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}
+.search--wrapper input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border:none;
+    outline: none;
+}
+.search--wrapper i.x {
+    font-size: 25px;
+    color: red;
+    cursor: pointer;
+}
+.province-list--wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 300px;
+    padding: 0 10px;
+    overflow-y: scroll;
+}
+.search .province-list {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    
+}
+.search .province-list .province-item {
+    padding: 10px;
+    color: #41a9ff;
+    font-size: 18px;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    border-bottom: 1px solid #ccc;
+}
+
+
+
+.select-province {
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    justify-items: flex-end;
+}
+
+.select-province i{
+    margin: 0 5px;
+}
+.select-province:hover  {
+    color: rgba(0,0,0,.7);;
+}
